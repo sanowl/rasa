@@ -13,6 +13,7 @@ from typing_extensions import Protocol
 
 import rasa.shared.constants
 import rasa.shared.utils.io
+import fickling
 
 if TYPE_CHECKING:
     from prompt_toolkit.validation import Validator
@@ -101,7 +102,7 @@ def pickle_load(filename: Union[Text, Path]) -> Any:
     Returns: the loaded object
     """
     with open(filename, "rb") as f:
-        return pickle.load(f)
+        return fickling.load(f)
 
 
 def create_temporary_file(data: Any, suffix: Text = "", mode: Text = "w+") -> Text:
