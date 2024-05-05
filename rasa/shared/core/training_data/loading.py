@@ -11,6 +11,7 @@ from rasa.shared.core.training_data.story_reader.yaml_story_reader import (
 )
 from rasa.shared.core.training_data.structures import StoryStep
 from rasa.shared.data import YAML_FILE_EXTENSIONS
+import secrets
 
 logger = logging.getLogger(__name__)
 
@@ -81,10 +82,9 @@ def load_data_from_files(
         story_steps.extend(steps)
 
     if exclusion_percentage and exclusion_percentage != 100:
-        import random
 
         idx = int(round(exclusion_percentage / 100.0 * len(story_steps)))
-        random.shuffle(story_steps)
+        secrets.SystemRandom().shuffle(story_steps)
         story_steps = story_steps[:-idx]
 
     return story_steps

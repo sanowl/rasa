@@ -1,6 +1,4 @@
 from collections import defaultdict, deque
-
-import random
 from typing import (
     Any,
     Text,
@@ -28,6 +26,7 @@ from rasa.shared.nlu.constants import (
     ENTITY_ATTRIBUTE_TYPE,
     INTENT_NAME_KEY,
 )
+import secrets
 
 if TYPE_CHECKING:
     from rasa.shared.nlu.training_data.training_data import TrainingData
@@ -73,7 +72,7 @@ class UserMessageGenerator:
         if structured_info.get(INTENT) is not None:
             intent_name = structured_info.get(INTENT, {}).get(INTENT_NAME_KEY)
             usable_examples = self.mapping.get(intent_name, [])[:]
-            random.shuffle(usable_examples)
+            secrets.SystemRandom().shuffle(usable_examples)
 
             if usable_examples:
                 return usable_examples[0].get(TEXT)
