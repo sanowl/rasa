@@ -15,6 +15,7 @@ from sanic.request import Request
 from sanic.response import HTTPResponse
 
 from rasa.core.channels.channel import UserMessage, OutputChannel, InputChannel
+from security import safe_requests
 
 MICROSOFT_OPEN_ID_URI = (
     "https://login.botframework.com/v1/.well-known/openidconfiguration"
@@ -213,7 +214,7 @@ class BotFrameworkInput(InputChannel):
 
         jwks_uri = conf["jwks_uri"]
 
-        keys_request = requests.get(jwks_uri)
+        keys_request = safe_requests.get(jwks_uri)
         keys_request.raise_for_status()
         keys_list = keys_request.json()
         self.jwt_keys = {key["kid"]: key for key in keys_list["keys"]}
