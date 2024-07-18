@@ -24,7 +24,7 @@ class MattermostBot(OutputChannel):
     def token_from_login(cls, url: Text, user: Text, password: Text) -> Optional[Text]:
         """Retrieve access token for mattermost user."""
         data = {"login_id": user, "password": password}
-        r = requests.post(url + "/users/login", data=json.dumps(data))
+        r = requests.post(url + "/users/login", data=json.dumps(data), timeout=60)
         if r.status_code == 200:
             return r.headers["Token"]
         else:
@@ -49,7 +49,7 @@ class MattermostBot(OutputChannel):
     def _post_data_to_channel(self, data: Dict[Text, Any]) -> Response:
         """Send a message to a mattermost channel."""
         headers = {"Authorization": "Bearer " + self.token}
-        r = requests.post(self.url + "/posts", headers=headers, data=json.dumps(data))
+        r = requests.post(self.url + "/posts", headers=headers, data=json.dumps(data), timeout=60)
         if not r.status_code == 200:
             logger.error(
                 f"Failed to send message to mattermost channel "

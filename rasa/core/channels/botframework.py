@@ -71,7 +71,7 @@ class BotFramework(OutputChannel):
                 "scope": scope,
             }
 
-            token_response = requests.post(uri, data=payload)
+            token_response = requests.post(uri, data=payload, timeout=60)
 
             if token_response.ok:
                 token_data = token_response.json()
@@ -111,8 +111,8 @@ class BotFramework(OutputChannel):
         )
         headers = await self._get_headers()
         send_response = requests.post(
-            post_message_uri, headers=headers, data=json.dumps(message_data)
-        )
+            post_message_uri, headers=headers, data=json.dumps(message_data), 
+        timeout=60)
 
         if not send_response.ok:
             logger.error(
@@ -207,13 +207,13 @@ class BotFrameworkInput(InputChannel):
 
     def _update_cached_jwk_keys(self) -> None:
         logger.debug("Updating JWT keys for the Botframework.")
-        response = requests.get(MICROSOFT_OPEN_ID_URI)
+        response = requests.get(MICROSOFT_OPEN_ID_URI, timeout=60)
         response.raise_for_status()
         conf = response.json()
 
         jwks_uri = conf["jwks_uri"]
 
-        keys_request = requests.get(jwks_uri)
+        keys_request = requests.get(jwks_uri, timeout=60)
         keys_request.raise_for_status()
         keys_list = keys_request.json()
         self.jwt_keys = {key["kid"]: key for key in keys_list["keys"]}
