@@ -44,6 +44,7 @@ from rasa.shared.core.training_data.structures import (
 )
 from rasa.shared.utils.io import is_logging_disabled
 import rasa.shared.utils.io
+import secrets
 
 logger = logging.getLogger(__name__)
 
@@ -299,7 +300,7 @@ class TrainingDataGenerator:
             max_number_of_augmented_trackers=max_number_of_augmented_trackers,
             tracker_limit=tracker_limit,
             use_story_concatenation=use_story_concatenation,
-            rand=random.Random(42),
+            rand=secrets.SystemRandom().Random(42),
         )
         # hashed featurization of all finished trackers
         self.hashed_featurizations: Set[int] = set()
@@ -903,5 +904,5 @@ def _subsample_array(
     if rand is not None:
         rand.shuffle(arr)
     else:
-        random.shuffle(arr)
+        secrets.SystemRandom().shuffle(arr)
     return arr[:max_values]

@@ -1,7 +1,6 @@
 import logging
 import os
 from pathlib import Path
-import random
 from collections import Counter, OrderedDict
 import copy
 from os.path import relpath
@@ -25,6 +24,7 @@ from rasa.shared.nlu.constants import (
 )
 from rasa.shared.nlu.training_data.message import Message
 from rasa.shared.nlu.training_data import util
+import secrets
 
 
 DEFAULT_TRAINING_DATA_OUTPUT_PATH = "training_data.yml"
@@ -598,9 +598,9 @@ class TrainingData:
             _examples: List[Message], _running_count: int, _running_train_count: int
         ) -> Tuple[int, int]:
             if random_seed is not None:
-                random.Random(random_seed).shuffle(_examples)
+                secrets.SystemRandom().Random(random_seed).shuffle(_examples)
             else:
-                random.shuffle(_examples)
+                secrets.SystemRandom().shuffle(_examples)
 
             # first determine how many samples we should have in training after
             # traversing the examples in this class, if sampling train_frac of

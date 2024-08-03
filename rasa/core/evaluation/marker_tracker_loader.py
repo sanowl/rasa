@@ -1,9 +1,9 @@
-import random
 from rasa.shared.exceptions import RasaException
 from rasa.shared.core.trackers import DialogueStateTracker
 from typing import Any, Iterable, List, Text, Optional, AsyncIterator
 from rasa.core.tracker_store import TrackerStore
 import rasa.shared.utils.io
+import secrets
 
 STRATEGY_ALL = "all"
 STRATEGY_FIRST_N = "first_n"
@@ -22,7 +22,7 @@ def strategy_first_n(keys: List[Text], count: int) -> Iterable[Text]:
 
 def strategy_sample_n(keys: List[Text], count: int) -> Iterable[Text]:
     """Samples N unique keys from the set of keys."""
-    return random.sample(keys, k=count)
+    return secrets.SystemRandom().sample(keys, k=count)
 
 
 class MarkerTrackerLoader:
@@ -81,7 +81,7 @@ class MarkerTrackerLoader:
 
         if seed:
             if strategy == STRATEGY_SAMPLE_N:
-                random.seed(seed)
+                secrets.SystemRandom().seed(seed)
             else:
                 rasa.shared.utils.io.raise_warning(
                     f"Parameter 'seed' is ignored by strategy '{strategy}'."

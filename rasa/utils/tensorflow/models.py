@@ -1,5 +1,4 @@
 import time
-import random
 import tensorflow as tf
 import numpy as np
 import logging
@@ -49,6 +48,7 @@ from rasa.utils.tensorflow.data_generator import (
 from rasa.shared.nlu.constants import TEXT
 from rasa.shared.exceptions import RasaException
 from rasa.utils.tensorflow.types import BatchData, MaybeNestedBatchData
+import secrets
 
 if TYPE_CHECKING:
     from tensorflow.python.types.core import GenericFunction
@@ -100,7 +100,7 @@ class RasaModel(Model):
         self._checkpoint = tf.train.Checkpoint(model=self)
 
     def _set_random_seed(self) -> None:
-        random.seed(self.random_seed)
+        secrets.SystemRandom().seed(self.random_seed)
         np.random.seed(self.random_seed)
         tf.random.set_seed(self.random_seed)
         tf.experimental.numpy.random.seed(self.random_seed)

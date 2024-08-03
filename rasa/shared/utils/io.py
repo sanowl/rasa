@@ -10,7 +10,6 @@ from pathlib import Path
 import re
 from typing import Any, Dict, List, Optional, Text, Type, Union
 import warnings
-import random
 import string
 import portalocker
 
@@ -32,6 +31,7 @@ from rasa.shared.exceptions import (
     RasaException,
 )
 import rasa.shared.utils.validation
+import secrets
 
 DEFAULT_ENCODING = "utf-8"
 YAML_VERSION = (1, 2)
@@ -635,7 +635,7 @@ def is_subdirectory(path: Text, potential_parent_directory: Text) -> bool:
 
 def random_string(length: int) -> Text:
     """Returns a random string of given length."""
-    return "".join(random.choices(string.ascii_uppercase + string.digits, k=length))
+    return "".join(secrets.SystemRandom().choices(string.ascii_uppercase + string.digits, k=length))
 
 
 def handle_print_blocking(output: Text) -> None:
